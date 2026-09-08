@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status 
-from .models import Usuario
-from .serializers import UsuarioSerializer
+from .models import Usuario, Turno
+from .serializers import UsuarioSerializer, TurnoSerializer
 
 #APIS RESTFUL
 #GET /USUARIOS
@@ -44,3 +44,21 @@ def usuarios_detail (request, pk):
         usuario = get_object_or_404(Usuario, pk=pk)
         usuario.delete()
         return Response({"mensaje": "Usuario eliminado correctamente"}, status=status.HTTP_200_OK)
+
+# --------------------------------------------------
+
+@api_view(["GET", "POST"])
+def turno(request):
+    #obtener turno
+    if request.method == "GET":
+        turnos = Turno.objects.all()
+        #serializar - Objeto de Py --> JSON
+        serializer = TurnoSerializer(turnos, many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    if request.method == "POST":
+        serializer = TurnoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"mensaje": "Turno creado correctamente"}, status=status.HTTP_201_CREATED)
+        return Response({"mensaje": "Error al crear el turno"}, status=status.HTTP_400_BAD_REQUEST)
