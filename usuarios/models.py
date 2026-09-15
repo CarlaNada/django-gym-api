@@ -15,10 +15,17 @@ class Usuario(models.Model):
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
 
+"""    
 class Turno(models.Model):
-    nombre = models.CharField(max_length=100)
-    fecha_hora = models.DateTimeField()
-    asistencia = models.BooleanField(default=False)
+    ESTADOS = [
+        ('RESERVADO', 'Reservado'),
+        ('ASISTIO', 'Asistió'),
+        ('CANCELADO', 'Cancelado'),
+    ]
 
-    def __str__(self):
-        return f"Turno {self.nombre} - {self.fecha_hora}"
+    socio = models.ForeignKey(Socio, on_delete=models.CASCADE, related_name='turnos')
+    fecha = models.DateField()                  # Ej: 2026-10-15
+    hora_inicio = models.TimeField()            # Ej: 08:00:00
+    hora_fin = models.TimeField()               # Ej: 09:00:00
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='RESERVADO')
+"""

@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status 
-from .models import Usuario, Turno
-from .serializers import UsuarioSerializer, TurnoSerializer
+from .models import Usuario
+from .serializers import UsuarioSerializer
 
 #APIS RESTFUL
 #GET /USUARIOS
@@ -48,17 +48,17 @@ def usuarios_detail (request, pk):
 # --------------------------------------------------
 
 @api_view(["GET", "POST"])
-def turno(request):
-    #obtener turno
+def actividades_list(request):
+    #obtener actividad
     if request.method == "GET":
-        turnos = Turno.objects.all()
+        actividades = Actividad.objects.all()
         #serializar - Objeto de Py --> JSON
-        serializer = TurnoSerializer(turnos, many=True)
+        serializer = ActividadSerializer(actividades, many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
     if request.method == "POST":
-        serializer = TurnoSerializer(data=request.data)
+        serializer = ActividadSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"mensaje": "Turno creado correctamente"}, status=status.HTTP_201_CREATED)
-        return Response({"mensaje": "Error al crear el turno"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"mensaje": "Actividad creada correctamente"}, status=status.HTTP_201_CREATED)
+        return Response({"mensaje": "Error al crear la actividad"}, status=status.HTTP_400_BAD_REQUEST)
